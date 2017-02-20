@@ -1,0 +1,97 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+    defaultConfig {
+        applicationId "com.tangxb.basic.something"
+        minSdkVersion 15
+        targetSdkVersion java.lang.Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+        }
+    }
+    productFlavors {
+        wandoujia {}
+        marke360 {}
+        xiaomi {}
+        tencent {}
+        huawei {}
+        pp {}
+        meizu {}
+        baidu {}
+
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_APPKEY:project.UMENG_APPKEY,UMENG_CHANNEL_VALUE: name]
+        }
+    }
+
+    buildTypes {
+        release {
+            buildConfigField("boolean", "LOG_DEBUG", "false")
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField("boolean", "LOG_DEBUG", "true")
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // 签名配置
+    File propFile = file('signing.properties');
+    if (propFile.exists()) {
+        def Properties props = new Properties()
+        props.load(new FileInputStream(propFile))
+        if (props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') && props.containsKey('KEY_ALIAS')
+                && props.containsKey('KEY_PASSWORD')) {
+            android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+            android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+            android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+            android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+        } else {
+            android.buildTypes.release.signingConfig = null
+        }
+    } else {
+        android.buildTypes.release.signingConfig = null
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.zhy:base-rvadapter:3.0.3'
+    compile 'com.chanven.lib:cptr:1.1.0'
+    compile 'com.github.medyo:dynamicbox:1.2@aar'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'pub.devrel:easypermissions:0.3.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.facebook.stetho:stetho:1.4.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
+    compile 'io.reactivex:rxjava:1.2.0'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+}
