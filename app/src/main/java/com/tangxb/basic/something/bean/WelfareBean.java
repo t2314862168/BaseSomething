@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Tangxb on 2017/2/15.
  */
-
 public class WelfareBean {
     /**
      * _id : 573d39ea6776591ca681f8c7
