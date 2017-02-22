@@ -2,6 +2,7 @@ package com.tangxb.basic.something;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -24,6 +25,12 @@ public class MApplication extends Application {
         super.onCreate();
         init();
         initDebugSth();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
     }
 
     /**

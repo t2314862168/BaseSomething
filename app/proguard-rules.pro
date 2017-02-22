@@ -96,3 +96,11 @@ public static java.lang.String TABLENAME;
 # If you do not use Rx:
 #-dontwarn rx.**
 #greenDAO end
+
+#okhttp
+-dontwarn okhttp3.**
+-keep class okhttp3.**{*;}
+
+#okio
+-dontwarn okio.**
+-keep class okio.**{*;}
