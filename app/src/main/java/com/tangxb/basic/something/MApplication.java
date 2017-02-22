@@ -8,6 +8,8 @@ import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tangxb.basic.something.imageloader.GlideLoaderFactory;
 import com.tangxb.basic.something.imageloader.ImageLoaderFactory;
+import com.tangxb.basic.something.okhttp.CacheUtils;
+import com.tangxb.basic.something.util.NetworkUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,6 +43,8 @@ public class MApplication extends Application {
     }
 
     private void init() {
+        NetworkUtils.setContext(this);
+        CacheUtils.setContext(this);
         initUMeng();
         initImageLoaderFactory();
         initRefWatcher();
