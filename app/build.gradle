@@ -8,9 +8,9 @@ greendao {
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
-//    dexOptions {
-//        preDexLibraries = false
-//    }
+    dexOptions {
+        preDexLibraries = false
+    }
     defaultConfig {
         applicationId "com.tangxb.basic.something"
         minSdkVersion 15
