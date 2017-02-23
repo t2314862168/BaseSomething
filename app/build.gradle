@@ -1,8 +1,16 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+
+greendao {
+    schemaVersion 1
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+    dexOptions {
+        preDexLibraries = false
+    }
     defaultConfig {
         applicationId "com.tangxb.basic.something"
         minSdkVersion 15
@@ -10,6 +18,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        // Enabling multidex support.
+        multiDexEnabled true
     }
     signingConfigs {
         release {
@@ -27,6 +37,15 @@ android {
 
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_APPKEY:project.UMENG_APPKEY,UMENG_CHANNEL_VALUE: name]
+        }
+        // 自定义偏好设置.
+        dev {
+            // 在Android leve 21或更高版本编译更快
+            minSdkVersion 15
+        }
+        prod {
+            // 真正的生产环境.
+            minSdkVersion 15
         }
     }
 
@@ -94,4 +113,6 @@ dependencies {
     compile 'io.reactivex:rxjava:1.2.0'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'org.greenrobot:greendao:3.2.0'
+    compile 'com.android.support:multidex:1.0.1'
 }

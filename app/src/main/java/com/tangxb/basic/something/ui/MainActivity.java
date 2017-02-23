@@ -9,15 +9,21 @@ import com.tangxb.basic.something.api.ApiFactory;
 import com.tangxb.basic.something.bean.BaseBean;
 import com.tangxb.basic.something.bean.WelfareBean;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

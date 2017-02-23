@@ -1,6 +1,7 @@
 package com.tangxb.basic.something.mvp.ui.activity;
 
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 

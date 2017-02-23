@@ -2,11 +2,14 @@ package com.tangxb.basic.something;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tangxb.basic.something.imageloader.GlideLoaderFactory;
 import com.tangxb.basic.something.imageloader.ImageLoaderFactory;
+import com.tangxb.basic.something.okhttp.CacheUtils;
+import com.tangxb.basic.something.util.NetworkUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -26,6 +29,12 @@ public class MApplication extends Application {
         initDebugSth();
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
+    }
+
     /**
      * 在{@link MDebugApplication#initDebugSth()}调试的时候使用
      */
@@ -34,6 +43,8 @@ public class MApplication extends Application {
     }
 
     private void init() {
+        NetworkUtils.setContext(this);
+        CacheUtils.setContext(this);
         initUMeng();
         initImageLoaderFactory();
         initRefWatcher();
