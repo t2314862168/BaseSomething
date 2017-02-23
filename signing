@@ -1,0 +1,75 @@
+[33mcommit 5a351d1d3f45993b253acf81904bc0b72a354474[m
+Author: t2314862168 <2314862168@qq.com>
+Date:   Thu Feb 23 12:43:02 2017 +0800
+
+    test123
+
+[33mcommit 729a76f21d4f4041f4b7b07b8d4be31266f10827[m
+Author: t2314862168 <2314862168@qq.com>
+Date:   Thu Feb 23 12:41:23 2017 +0800
+
+    test123
+
+[33mcommit 75eccac705f69ea335f238da2e5f2e1eec9f3b3d[m
+Merge: d92c677 35d673e
+Author: t2314862168 <2314862168@qq.com>
+Date:   Thu Feb 23 12:36:36 2017 +0800
+
+    test11
+
+[33mcommit d92c6770640169401446acc71cf2dfb77f71d003[m
+Author: t2314862168 <2314862168@qq.com>
+Date:   Thu Feb 23 12:34:07 2017 +0800
+
+    test1
+
+[33mcommit 35d673ec083f7c0c1f6f37a904503cd25fe1ec1a[m
+Author: t2314862168 <2314862168@qq.com>
+Date:   Wed Feb 22 16:25:17 2017 +0800
+
+    add network cache
+
+[33mcommit 28ad65d5bbcb8d5fb9fd6ab97b4fec82a32384f8[m
+Author: t2314862168 <2314862168@qq.com>
+Date:   Wed Feb 22 11:02:42 2017 +0800
+
+    add multidex1
+
+[33mcommit e1917bc5273a7dc3f0456234accbdd7ef0711580[m
+Author: t2314862168 <2314862168@qq.com>
+Date:   Wed Feb 22 11:00:02 2017 +0800
+
+    add multidex
+
+[33mcommit 96dbd78ffa3e81742b168129fc89e6dfe5785b2f[m
+Merge: 23c2b38 e07a84c
+Author: t2314862168 <2314862168@qq.com>
+Date:   Mon Feb 20 18:06:00 2017 +0800
+
+    greendao Merge branch 'master' of github.com:t2314862168/BaseSomething
+
+[33mcommit 23c2b383f05787e6a4b7b7f948cf086d13bc79c4[m
+Author: t2314862168 <2314862168@qq.com>
+Date:   Mon Feb 20 18:05:33 2017 +0800
+
+    test greendao
+
+[33mcommit e07a84c7726c3195725a78fa3173cc0ca9fc5ad6[m
+Author: t2314862168 <2314862168@qq.com>
+Date:   Mon Feb 20 13:06:03 2017 +0800
+
+    Update README.md
+    
+    添加说明
+
+[33mcommit c8e5c3ee32d048813bcedaad166816b4da4a4d81[m
+Author: t2314862168 <2314862168@qq.com>
+Date:   Mon Feb 20 12:33:34 2017 +0800
+
+    delete build
+
+[33mcommit aa0994fa30c9dbfb96035e13c2327b8ed9e23680[m
+Author: t2314862168 <2314862168@qq.com>
+Date:   Mon Feb 20 11:17:50 2017 +0800
+
+    first init
