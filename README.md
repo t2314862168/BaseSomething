@@ -6,5 +6,6 @@
 3. 下拉刷新库是com.chanven.lib:cptr(在此基础上实现了多指下拉的功能),adapter库是com.zhy:base-rvadapter
 4. 利用okhttp做了网络请求结果缓存,详情查看CacheInterceptor
 
+<br>
 下面是效果图
-![你们要的黄图](https://github.com/t2314862168/BaseSomething/blob/master/gif/jdfw.gif)
+![Alt Text](https://github.com/t2314862168/BaseSomething/blob/master/gif/jdfw.gif)
