@@ -9,10 +9,15 @@ import com.squareup.leakcanary.RefWatcher;
 import com.tangxb.basic.something.imageloader.GlideLoaderFactory;
 import com.tangxb.basic.something.imageloader.ImageLoaderFactory;
 import com.tangxb.basic.something.okhttp.CacheUtils;
+import com.tangxb.basic.something.okhttp.OkHttpUtils;
 import com.tangxb.basic.something.util.NetworkUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 /**
  * Created by Tangxb on 2017/2/14.
@@ -45,9 +50,19 @@ public class MApplication extends Application {
     private void init() {
         NetworkUtils.setContext(this);
         CacheUtils.setContext(this);
+        initOkHttpUtils();
         initUMeng();
         initImageLoaderFactory();
         initRefWatcher();
+    }
+
+    private void initOkHttpUtils() {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(10 * 1000L, TimeUnit.MILLISECONDS)
+                .readTimeout(60 * 1000L, TimeUnit.MILLISECONDS)
+                .writeTimeout(60 * 1000L, TimeUnit.MILLISECONDS)
+                .build();
+        OkHttpUtils.initClient(okHttpClient);
     }
 
     private void initUMeng() {

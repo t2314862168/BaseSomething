@@ -8,28 +8,47 @@ import com.tangxb.basic.something.RetrofitClient;
 import com.tangxb.basic.something.api.ApiFactory;
 import com.tangxb.basic.something.bean.BaseBean;
 import com.tangxb.basic.something.bean.WelfareBean;
+import com.tangxb.basic.something.okhttp.OkHttpUtils;
+import com.tangxb.basic.something.okhttp.callback.StringCallback;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        testOkHttpPostForm();
+//        testRetrofit();
+    }
 
-        testRetrofit();
+    /**
+     * <a href="https://github.com/jeasonlzy/okhttp-OkGo/blob/master/app/src/main/java/com/lzy/demo/utils/Urls.java">可以测试使用的地址</a>
+     */
+    private void testOkHttpPostForm() {
+        String url = "http://server.jeasonlzy.com/OkHttpUtils/upload";
+        OkHttpUtils.post().tag(TAG).url(url).addParams("key1", "value").build().execute(new StringCallback() {
+            @Override
+            public void onError(okhttp3.Call call, Exception e, int id) {
+                System.out.println();
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                System.out.println();
+            }
+
+            @Override
+            public void inProgress(float progress, long total, int id) {
+                System.out.println();
+            }
+        });
     }
 
     private void testRetrofit() {
