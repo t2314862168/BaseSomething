@@ -7,4 +7,4 @@
 4. 利用okhttp做了网络请求结果缓存,详情查看CacheInterceptor
 
 下面是效果图
-![你们要的黄图](https://github.com/t2314862168/BaseSomething/gif/jdfw.gif)
+![你们要的黄图](https://github.com/t2314862168/BaseSomething/blob/master/gif/jdfw.gif)
