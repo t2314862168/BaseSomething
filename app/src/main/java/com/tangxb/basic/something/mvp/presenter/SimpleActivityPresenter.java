@@ -3,6 +3,7 @@ package com.tangxb.basic.something.mvp.presenter;
 import android.util.Log;
 
 import com.tangxb.basic.something.bean.WelfareBean;
+import com.tangxb.basic.something.compress.ImageCompressUtils;
 import com.tangxb.basic.something.mvp.model.BaseModel;
 import com.tangxb.basic.something.mvp.model.BaseModelImpl;
 import com.tangxb.basic.something.mvp.view.BaseActivityView;

@@ -1,7 +1,6 @@
 package com.tangxb.basic.something.mvp.ui.activity;
 
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
@@ -13,6 +12,7 @@ import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.tangxb.basic.something.R;
 import com.tangxb.basic.something.api.TSubscriber;
 import com.tangxb.basic.something.bean.WelfareBean;
+import com.tangxb.basic.something.compress.ImageCompressUtils;
 import com.tangxb.basic.something.mvp.presenter.BasePresenter;
 import com.tangxb.basic.something.mvp.presenter.SimpleActivityPresenter;
 import com.tangxb.basic.something.mvp.view.BaseActivityView;
@@ -20,14 +20,11 @@ import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.functions.Func2;
 
 /**
  * Created by Tangxb on 2017/2/15.
@@ -100,6 +97,26 @@ public class SimpleActivity extends BaseActivity implements BaseActivityView {
                 loadData();
             }
         });
+    }
+
+    /**
+     * https://github.com/huijimuhe/Luban-Circle-Demo/blob/master/app/src/main/java/com/huijimuhe/luban_circle_demo/MainActivity.java
+     */
+    private void testCompressPicture() {
+        ImageCompressUtils.from(this).load("path")
+                .putGear(ImageCompressUtils.THIRD_GEAR)
+                .setFilename("filename")
+                .execute(new ImageCompressUtils.OnCompressListener() {
+                    @Override
+                    public void onSuccess(File file) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     /**
