@@ -13,6 +13,7 @@ import com.tangxb.basic.something.R;
 import com.tangxb.basic.something.api.TSubscriber;
 import com.tangxb.basic.something.bean.WelfareBean;
 import com.tangxb.basic.something.compress.ImageCompressUtils;
+import com.tangxb.basic.something.demo.rxjava.RxJavaGreenDaoDemo;
 import com.tangxb.basic.something.mvp.presenter.BasePresenter;
 import com.tangxb.basic.something.mvp.presenter.SimpleActivityPresenter;
 import com.tangxb.basic.something.mvp.view.BaseActivityView;
@@ -54,6 +55,8 @@ public class SimpleActivity extends BaseActivity implements BaseActivityView {
 
     @Override
     protected void initData() {
+        RxJavaGreenDaoDemo demo = new RxJavaGreenDaoDemo(getApplicationContext());
+        demo.testSomething();
         CommonAdapter<WelfareBean> commonAdapter = new CommonAdapter<WelfareBean>(mActivity, R.layout.layout_recylerview_item, mData) {
             @Override
             protected void convert(ViewHolder holder, WelfareBean welfareBean, int position) {
