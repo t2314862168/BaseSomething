@@ -10,19 +10,24 @@ import com.chanven.lib.cptr.PtrFrameLayoutEx;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.tangxb.basic.something.R;
+import com.tangxb.basic.something.bean.MBaseBean;
+import com.tangxb.basic.something.bean.UserLoginResultBean;
 import com.tangxb.basic.something.bean.WelfareBean;
 import com.tangxb.basic.something.compress.ImageCompressUtils;
 import com.tangxb.basic.something.demo.rxjava.RxJavaGreenDaoDemo;
 import com.tangxb.basic.something.mvp.presenter.BasePresenter;
 import com.tangxb.basic.something.mvp.presenter.SimpleActivityPresenter;
 import com.tangxb.basic.something.mvp.view.BaseActivityView;
+import com.tangxb.basic.something.tools.encrypt.MessageDigestUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import io.reactivex.functions.Consumer;
@@ -42,10 +47,12 @@ public class SimpleActivity extends BaseActivity implements BaseActivityView {
     RecyclerView mRecyclerView;
     private List<WelfareBean> mData = new ArrayList<>();
     private RecyclerAdapterWithHF mAdapter;
+    private SimpleActivityPresenter activityPresenter;
 
     @Override
     protected BasePresenter createPresenter() {
-        return new SimpleActivityPresenter(this);
+        activityPresenter = new SimpleActivityPresenter(this);
+        return activityPresenter;
     }
 
     @Override
@@ -100,6 +107,45 @@ public class SimpleActivity extends BaseActivity implements BaseActivityView {
                 loadData();
             }
         });
+
+        try {
+            testLoginUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    UserLoginResultBean userLoginResultBean;
+
+    public void testGetData() {
+        Map<String, String> data = new HashMap<>();
+        data.put("page", String.valueOf(0));
+        data.put("rows", String.valueOf(12));
+        data.put("isList", String.valueOf(1));
+        data.put("user_id", null);
+        String token = userLoginResultBean.getUser().getToken();
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String sig = MessageDigestUtils.getSign(data, token, timestamp);
+        mvpPresenter.addSubscription(activityPresenter.getCategory(token, sig, timestamp, 0, 1, null, null), new Consumer<MBaseBean<String>>() {
+            @Override
+            public void accept(MBaseBean<String> bean) throws Exception {
+               String str = bean.getData();
+                System.out.println();
+            }
+        });
+    }
+
+    public void testLoginUser() {
+        String username = "18782963990";
+        String password = "123456";
+        mvpPresenter.addSubscription(activityPresenter.loginUser(username, password), new Consumer<MBaseBean<UserLoginResultBean>>() {
+            @Override
+            public void accept(MBaseBean<UserLoginResultBean> bean) throws Exception {
+                userLoginResultBean = bean.getData();
+                testGetData();
+                System.out.println();
+            }
+        });
     }
 
     /**
@@ -126,8 +172,8 @@ public class SimpleActivity extends BaseActivity implements BaseActivityView {
      * 注意每次的Observable和Subscriber都需要新生成
      */
     private void loadData() {
-        initTSubscriber();
-        mvpPresenter.addSubscription(mvpPresenter.createObservable(category, pageSize, pageNum), tSubscriber);
+//        initTSubscriber();
+//        mvpPresenter.addSubscription(mvpPresenter.createObservable(category, pageSize, pageNum), tSubscriber);
     }
 
     protected void initTSubscriber() {

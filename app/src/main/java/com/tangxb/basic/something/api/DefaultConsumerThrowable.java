@@ -1,5 +1,7 @@
 package com.tangxb.basic.something.api;
 
+import com.tangxb.basic.something.util.MLogUtils;
+
 import io.reactivex.functions.Consumer;
 
 /**
@@ -8,8 +10,10 @@ import io.reactivex.functions.Consumer;
  */
 
 public class DefaultConsumerThrowable implements Consumer<Throwable> {
+    private static final String TAG = DefaultConsumerThrowable.class.getSimpleName();
+
     @Override
     public void accept(Throwable throwable) throws Exception {
-
+        MLogUtils.d(TAG, throwable.toString());
     }
 }
