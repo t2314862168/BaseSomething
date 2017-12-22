@@ -5,9 +5,9 @@ import com.tangxb.basic.something.bean.WelfareBean;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import rx.Observable;
 
 /**
  * Created by Tangxb on 2016/11/4.

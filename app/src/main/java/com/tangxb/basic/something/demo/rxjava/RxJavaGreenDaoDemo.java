@@ -12,11 +12,13 @@ import org.greenrobot.greendao.database.Database;
 
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * <a href="http://www.th7.cn/Program/Android/201702/1115565.shtml">greendao3.0 多表关联踩坑实践</a><br>
@@ -47,18 +49,18 @@ public class RxJavaGreenDaoDemo {
     public void test1() {
         final String methodName = "####test1()";
         Observable
-                .create(new Observable.OnSubscribe<Long>() {
+                .create(new ObservableOnSubscribe<Long>() {
                     @Override
-                    public void call(Subscriber<? super Long> subscriber) {
-                        subscriber.onNext(10L);
+                    public void subscribe(@NonNull ObservableEmitter<Long> e) throws Exception {
+                        e.onNext(10L);
                         Log.d(TAG + methodName, "call Current Thread===" + Thread.currentThread().getName());
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Action1<Long>() {
+                .subscribe(new Consumer<Long>() {
                     @Override
-                    public void call(Long count) {
+                    public void accept(Long count) throws Exception {
                         Log.d(TAG + methodName, "subscribe Current Thread===" + Thread.currentThread().getName());
                         Log.d(TAG + methodName, "subscribe count===" + count);
                     }
@@ -67,22 +69,7 @@ public class RxJavaGreenDaoDemo {
 
     public void test2() {
         final String methodName = "####test2()";
-        Observable
-                .create(new Observable.OnSubscribe<List<StudentModel>>() {
-                    @Override
-                    public void call(Subscriber<? super List<StudentModel>> subscriber) {
-                        subscriber.onNext(getStudents());
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Action1<List<StudentModel>>() {
-                    @Override
-                    public void call(List<StudentModel> count) {
-                        Log.d(TAG + methodName, "subscribe count===" + count.size());
-                        System.out.println();
-                    }
-                });
+
     }
 
     private List<StudentModel> getStudents() {

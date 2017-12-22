@@ -10,7 +10,6 @@ import com.chanven.lib.cptr.PtrFrameLayoutEx;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.tangxb.basic.something.R;
-import com.tangxb.basic.something.api.TSubscriber;
 import com.tangxb.basic.something.bean.WelfareBean;
 import com.tangxb.basic.something.compress.ImageCompressUtils;
 import com.tangxb.basic.something.demo.rxjava.RxJavaGreenDaoDemo;
@@ -26,13 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Tangxb on 2017/2/15.
  */
 
 public class SimpleActivity extends BaseActivity implements BaseActivityView {
-    private TSubscriber tSubscriber;
+    private Consumer<List<WelfareBean>> tSubscriber;
     private final String category = "福利";
     private final int pageSize = 20;
     private int pageNum = 1;
@@ -131,19 +131,9 @@ public class SimpleActivity extends BaseActivity implements BaseActivityView {
     }
 
     protected void initTSubscriber() {
-        tSubscriber = new TSubscriber() {
+        tSubscriber = new Consumer<List<WelfareBean>>() {
             @Override
-            public void onCompleted() {
-                System.out.println();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                System.out.println();
-            }
-
-            @Override
-            public void onNext(List<WelfareBean> listBean) {
+            public void accept(List<WelfareBean> listBean) throws Exception {
                 if (pageNum == 1) {
                     mData.clear();
                     mData.addAll(listBean);

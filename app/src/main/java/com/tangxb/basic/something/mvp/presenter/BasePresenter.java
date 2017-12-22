@@ -1,12 +1,15 @@
 package com.tangxb.basic.something.mvp.presenter;
 
+import com.tangxb.basic.something.api.DefaultConsumerThrowable;
+
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * <a href="https://github.com/WuXiaolong/AndroidMVPSample/blob/master/app/src/main/java/com/wuxiaolong/androidmvpsample/mvp/other/BasePresenter.java">好的实例</a> <br>
@@ -15,24 +18,26 @@ import rx.subscriptions.CompositeSubscription;
 
 public class BasePresenter<V> {
     public V mvpView;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mCompositeDisposable;
+    private DefaultConsumerThrowable mDefaultConsumerThrowable;
 
     public void attachView(V mvpView) {
         this.mvpView = mvpView;
+        mDefaultConsumerThrowable = new DefaultConsumerThrowable();
     }
 
     public void detachView() {
         this.mvpView = null;
-        onUnsubscribe();
+        onUnSubscribe();
     }
 
     /**
      * 取消注册，以避免内存泄露
      */
-    public void onUnsubscribe() {
-        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
-            mCompositeSubscription.unsubscribe();
-            mCompositeSubscription = null;
+    public void onUnSubscribe() {
+        if (mCompositeDisposable != null && !mCompositeDisposable.isDisposed()) {
+            mCompositeDisposable.dispose();
+            mCompositeDisposable = null;
         }
     }
 
@@ -40,13 +45,23 @@ public class BasePresenter<V> {
         return null;
     }
 
-    public void addSubscription(Observable observable, Subscriber subscriber) {
-        if (mCompositeSubscription == null) {
-            mCompositeSubscription = new CompositeSubscription();
+    public <T> void addSubscription(Observable<T> observable, Consumer<T> consumer) {
+        if (mCompositeDisposable == null) {
+            mCompositeDisposable = new CompositeDisposable();
         }
-        mCompositeSubscription.add(observable
+        mCompositeDisposable.add(observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber));
+                .subscribe(consumer, mDefaultConsumerThrowable));
+    }
+
+    public <T> void addSubscription(Observable<T> observable, Consumer<T> consumer, Consumer<Throwable> onError) {
+        if (mCompositeDisposable == null) {
+            mCompositeDisposable = new CompositeDisposable();
+        }
+        mCompositeDisposable.add(observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(consumer, onError));
     }
 }

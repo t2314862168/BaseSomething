@@ -7,7 +7,8 @@ import com.tangxb.basic.something.mvp.view.BaseFragmentView;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 /**
  * Created by Tangxb on 2016/12/13.
