@@ -157,6 +157,7 @@
     <orderEntry type="library" exported="" name="support-vector-drawable-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="logging-interceptor-3.9.0" level="project" />
     <orderEntry type="library" exported="" name="leakcanary-watcher-1.5.4" level="project" />
+    <orderEntry type="library" exported="" name="nativecrashreport-3.3.1" level="project" />
     <orderEntry type="library" exported="" name="easypermissions-0.3.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.8.2" level="project" />
     <orderEntry type="library" exported="" name="haha-2.0.3" level="project" />
@@ -166,6 +167,7 @@
     <orderEntry type="library" exported="" name="support-core-ui-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="logger-2.1.1" level="project" />
     <orderEntry type="library" exported="" name="leakcanary-analyzer-1.5.4" level="project" />
+    <orderEntry type="library" exported="" name="crashreport-2.6.6.1" level="project" />
     <orderEntry type="library" exported="" name="glide-3.7.0" level="project" />
     <orderEntry type="library" exported="" name="jsr305-2.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-core-utils-25.1.0" level="project" />

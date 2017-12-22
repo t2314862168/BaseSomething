@@ -3,7 +3,10 @@ package com.tangxb.basic.something;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.text.TextUtils;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tangxb.basic.something.imageloader.GlideLoaderFactory;
@@ -11,10 +14,14 @@ import com.tangxb.basic.something.imageloader.ImageLoaderFactory;
 import com.tangxb.basic.something.okhttp.CacheUtils;
 import com.tangxb.basic.something.okhttp.OkHttpUtils;
 import com.tangxb.basic.something.util.NetworkUtils;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -54,6 +61,8 @@ public class MApplication extends Application {
         initUMeng();
         initImageLoaderFactory();
         initRefWatcher();
+        initBugly();
+        Logger.addLogAdapter(new AndroidLogAdapter());
     }
 
     private void initOkHttpUtils() {
@@ -99,5 +108,47 @@ public class MApplication extends Application {
             EventBus.getDefault().unregister(object);
         } catch (Exception e) {
         }
+    }
+
+    private void initBugly() {
+        Context context = getApplicationContext();
+        // 获取当前包名
+        String packageName = context.getPackageName();
+        // 获取当前进程名
+        String processName = getProcessName(android.os.Process.myPid());
+        // 设置是否为上报进程
+        CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
+        strategy.setUploadProcess(processName == null || processName.equals(packageName));
+        // 初始化Bugly
+        CrashReport.initCrashReport(context, "62156d7612", BuildConfig.DEBUG, strategy);
+    }
+
+    /**
+     * 获取进程号对应的进程名
+     *
+     * @param pid 进程号
+     * @return 进程名
+     */
+    private String getProcessName(int pid) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
+            String processName = reader.readLine();
+            if (!TextUtils.isEmpty(processName)) {
+                processName = processName.trim();
+            }
+            return processName;
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return null;
     }
 }

@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'bugly'
+
+bugly {
+    appId = "62156d7612"
+    appKey = "6bb8a7e2-ea28-4e50-81bc-a5c04fe745ea"
+}
 
 greendao {
     schemaVersion 1
@@ -20,20 +26,30 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // Enabling multidex support.
         multiDexEnabled true
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
     }
     signingConfigs {
         release {
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+        release {
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
     productFlavors {
         wandoujia {}
-        marke360 {}
-        xiaomi {}
-        tencent {}
-        huawei {}
-        pp {}
-        meizu {}
-        baidu {}
+//        marke360 {}
+//        xiaomi {}
+//        tencent {}
+//        huawei {}
+//        pp {}
+//        meizu {}
+//        baidu {}
 
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_APPKEY:project.UMENG_APPKEY,UMENG_CHANNEL_VALUE: name]
@@ -123,4 +139,6 @@ dependencies {
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.orhanobut:logger:2.1.1'
+    compile 'com.tencent.bugly:crashreport:latest.release'
+    compile 'com.tencent.bugly:nativecrashreport:latest.release'
 }

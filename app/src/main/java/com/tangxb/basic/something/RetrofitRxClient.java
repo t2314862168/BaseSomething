@@ -4,6 +4,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.tangxb.basic.something.api.ApiContants;
 import com.tangxb.basic.something.okhttp.CacheInterceptor;
 import com.tangxb.basic.something.okhttp.CacheUtils;
+import com.tangxb.basic.something.okhttp.HttpLogger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,9 +34,12 @@ public enum RetrofitRxClient {
 
     RetrofitRxClient() {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+        HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new HttpLogger());
+        logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         // 使用Chrome调试
         builder.addNetworkInterceptor(new StethoInterceptor());
-        builder.addInterceptor(new CacheInterceptor());
+        builder.addInterceptor(logInterceptor);
+//        builder.addInterceptor(new CacheInterceptor());
         OkHttpClient client = builder.cache(CacheUtils.getCacheDir()).build();
 
         retrofit = new Retrofit.Builder()
