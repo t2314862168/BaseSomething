@@ -77,6 +77,7 @@ public class TaskFragment extends BaseFragment implements TaskFragmentView {
 
     @Override
     protected void initData() {
+        // 这里开始调试接口,请用restful风格
         Map<String, String> data = new HashMap<>();
         int page = 0;
         int rows = 12;
