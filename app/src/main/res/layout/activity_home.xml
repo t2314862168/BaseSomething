@@ -7,14 +7,15 @@
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
-        app:tabBackground="@color/colorPrimary"
-        app:tabTextColor="@color/colorPrimaryDark"
-        app:tabSelectedTextColor="@color/colorAccent"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:tabIndicatorColor="@color/colorAccent"
+        app:tabBackground="@color/material_red_400"
+        app:tabIndicatorColor="@android:color/darker_gray"
         app:tabIndicatorHeight="3dp"
-        app:tabMode="fixed" />
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextAppearance="@android:style/TextAppearance.Holo.Medium"
+        app:tabTextColor="@android:color/black" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

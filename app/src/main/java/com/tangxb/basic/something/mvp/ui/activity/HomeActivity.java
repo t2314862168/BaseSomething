@@ -9,6 +9,7 @@ import com.tangxb.basic.something.mvp.presenter.HomeActivityPresenter;
 import com.tangxb.basic.something.mvp.view.HomeActivityView;
 
 import butterknife.BindView;
+import qiu.niorgai.StatusBarCompat;
 
 /**
  * Created by Taxngb on 2017/12/25.
@@ -35,6 +36,7 @@ public class HomeActivity extends BaseActivity implements HomeActivityView {
 
     @Override
     protected void initData() {
+        StatusBarCompat.setStatusBarColor(this,mResources.getColor(R.color.material_red_400));
         homeActivityFragmentAdapter = new HomeActivityFragmentAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(homeActivityFragmentAdapter);
         mTabLayout.setupWithViewPager(mViewPager);

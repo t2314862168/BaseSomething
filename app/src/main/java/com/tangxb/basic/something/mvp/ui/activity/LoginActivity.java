@@ -61,7 +61,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
             til_account.getEditText().setText(username);
             til_password.getEditText().setText(password);
             mRememberPwdFlag = true;
-            int resId = mRememberPwdFlag ? R.drawable.ic_check_box_black_24dp : R.drawable.ic_check_box_outline_blank_grey_700_24dp;
+            int resId = mRememberPwdFlag ? R.drawable.ic_check_box_red_400_24dp : R.drawable.ic_check_box_outline_blank_grey_700_24dp;
             Drawable drawable = MDrawableUtils.getDrawable(mResources, resId);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mRememberPwdTv.setCompoundDrawables(drawable, null, null, null);
@@ -133,6 +133,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         ToastUtils.t(mApplication, mResources.getString(R.string.login_success));
         Intent intent = new Intent(mActivity, HomeActivity.class);
         startActivity(intent);
+        finish();
     }
 
     /**
@@ -183,7 +184,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
     @OnClick(R.id.tv_remember_password)
     public void clickRememberPwdTv(View view) {
         mRememberPwdFlag = !mRememberPwdFlag;
-        int resId = mRememberPwdFlag ? R.drawable.ic_check_box_black_24dp : R.drawable.ic_check_box_outline_blank_grey_700_24dp;
+        int resId = mRememberPwdFlag ? R.drawable.ic_check_box_red_400_24dp : R.drawable.ic_check_box_outline_blank_grey_700_24dp;
         Drawable drawable = MDrawableUtils.getDrawable(mResources, resId);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mRememberPwdTv.setCompoundDrawables(drawable, null, null, null);
