@@ -109,38 +109,38 @@ public class SimpleActivity extends BaseActivity implements BaseActivityView {
         });
     }
 
-    UserLoginResultBean userLoginResultBean;
-
-    public void testGetData() {
-        Map<String, String> data = new HashMap<>();
-        data.put("page", String.valueOf(0));
-        data.put("rows", String.valueOf(12));
-        data.put("isList", String.valueOf(1));
-        data.put("user_id", null);
-        String token = userLoginResultBean.getUser().getToken();
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        String sig = MessageDigestUtils.getSign(data, token, timestamp);
-        mvpPresenter.addSubscription(activityPresenter.getCategory(token, sig, timestamp, 0, 1, null, null), new Consumer<MBaseBean<String>>() {
-            @Override
-            public void accept(MBaseBean<String> bean) throws Exception {
-               String str = bean.getData();
-                System.out.println();
-            }
-        });
-    }
-
-    public void testLoginUser() {
-        String username = "18782963990";
-        String password = "123456";
-        mvpPresenter.addSubscription(activityPresenter.loginUser(username, password), new Consumer<MBaseBean<UserLoginResultBean>>() {
-            @Override
-            public void accept(MBaseBean<UserLoginResultBean> bean) throws Exception {
-                userLoginResultBean = bean.getData();
-                testGetData();
-                System.out.println();
-            }
-        });
-    }
+//    UserLoginResultBean userLoginResultBean;
+//
+//    public void testGetData() {
+//        Map<String, String> data = new HashMap<>();
+//        data.put("page", String.valueOf(0));
+//        data.put("rows", String.valueOf(12));
+//        data.put("isList", String.valueOf(1));
+//        data.put("user_id", null);
+//        String token = userLoginResultBean.getUser().getToken();
+//        String timestamp = String.valueOf(System.currentTimeMillis());
+//        String sig = MessageDigestUtils.getSign(data, token, timestamp);
+//        mvpPresenter.addSubscription(activityPresenter.getCategory(token, sig, timestamp, 0, 1, null, null), new Consumer<MBaseBean<String>>() {
+//            @Override
+//            public void accept(MBaseBean<String> bean) throws Exception {
+//               String str = bean.getData();
+//                System.out.println();
+//            }
+//        });
+//    }
+//
+//    public void testLoginUser() {
+//        String username = "18782963990";
+//        String password = "123456";
+//        mvpPresenter.addSubscription(activityPresenter.loginUser(username, password), new Consumer<MBaseBean<UserLoginResultBean>>() {
+//            @Override
+//            public void accept(MBaseBean<UserLoginResultBean> bean) throws Exception {
+//                userLoginResultBean = bean.getData();
+//                testGetData();
+//                System.out.println();
+//            }
+//        });
+//    }
 
     /**
      * https://github.com/huijimuhe/Luban-Circle-Demo/blob/master/app/src/main/java/com/huijimuhe/luban_circle_demo/MainActivity.java

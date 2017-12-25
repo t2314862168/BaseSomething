@@ -52,7 +52,7 @@ android {
 //        baidu {}
 
         productFlavors.all { flavor ->
-            flavor.manifestPlaceholders = [UMENG_APPKEY:project.UMENG_APPKEY,UMENG_CHANNEL_VALUE: name]
+            flavor.manifestPlaceholders = [UMENG_APPKEY: project.UMENG_APPKEY, UMENG_CHANNEL_VALUE: name]
         }
         // 自定义偏好设置.
         dev {
@@ -109,7 +109,7 @@ dependencies {
 
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile('com.zhy:base-rvadapter:3.0.3', {
-        exclude group: 'com.android.support', module: 'recyclerview-v7'
+        exclude group: 'com.android.support'
     })
     compile 'com.chanven.lib:cptr:1.1.0'
     compile 'com.github.medyo:dynamicbox:1.2@aar'
@@ -127,7 +127,7 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile('com.squareup.retrofit2:retrofit:2.3.0', {
-        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+        exclude group: 'com.squareup.okhttp3'
     })
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
@@ -141,4 +141,13 @@ dependencies {
     compile 'com.orhanobut:logger:2.1.1'
     compile 'com.tencent.bugly:crashreport:latest.release'
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    compile 'com.flaviofaria:kenburnsview:1.0.7'
+    compile('com.github.niorgai:StatusBarCompat:2.1.4', {
+        exclude group: 'com.android.support'
+    })
+    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:cardview-v7:25.1.0'
+    compile('cn.pedant.sweetalert:library:1.3', {
+        exclude group: 'com.android.support'
+    })
 }

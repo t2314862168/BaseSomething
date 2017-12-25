@@ -74,6 +74,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         if (isNeedOnCreateRegister) {
             mApplication.registerEventBus(this);
         }
+        mApplication.pushActivity(this);
     }
 
     protected void initData() {
@@ -117,5 +118,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         if (isNeedOnCreateRegister) {
             mApplication.unregisterEventBus(this);
         }
+        mApplication.removeActivity(this);
     }
 }

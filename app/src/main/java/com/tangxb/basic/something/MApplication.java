@@ -9,8 +9,10 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.tangxb.basic.something.bean.UserLoginResultBean;
 import com.tangxb.basic.something.imageloader.GlideLoaderFactory;
 import com.tangxb.basic.something.imageloader.ImageLoaderFactory;
+import com.tangxb.basic.something.mvp.ui.activity.BaseActivity;
 import com.tangxb.basic.something.okhttp.CacheUtils;
 import com.tangxb.basic.something.okhttp.OkHttpUtils;
 import com.tangxb.basic.something.util.NetworkUtils;
@@ -22,6 +24,10 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -33,6 +39,8 @@ import okhttp3.OkHttpClient;
 public class MApplication extends Application {
     private ImageLoaderFactory imageLoaderFactory;
     private RefWatcher mRefWatcher;
+    private UserLoginResultBean mUserLoginResultBean;
+    private Stack<WeakReference<BaseActivity>> mActivityStack;
 
     @Override
     public void onCreate() {
@@ -63,6 +71,11 @@ public class MApplication extends Application {
         initRefWatcher();
         initBugly();
         Logger.addLogAdapter(new AndroidLogAdapter());
+        initActivityStack();
+    }
+
+    private void initActivityStack() {
+        mActivityStack = new Stack<>();
     }
 
     private void initOkHttpUtils() {
@@ -148,6 +161,117 @@ public class MApplication extends Application {
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
+        }
+        return null;
+    }
+
+    public UserLoginResultBean getUserLoginResultBean() {
+        return mUserLoginResultBean;
+    }
+
+    public void setUserLoginResultBean(UserLoginResultBean mUserLoginResultBean) {
+        this.mUserLoginResultBean = mUserLoginResultBean;
+    }
+
+    /**
+     * 添加Activity到ActivityStack里面
+     *
+     * @param activity
+     */
+    public void pushActivity(BaseActivity activity) {
+        mActivityStack.push(new WeakReference<>(activity));
+    }
+
+    /**
+     * 移除ActivityStack栈顶元素
+     */
+    public void removeTopActivity() {
+        mActivityStack.pop();
+    }
+
+    /**
+     * 移除自身之外的其他Activity并且finish
+     *
+     * @param baseActivity
+     */
+    public void finishOtherActivity(BaseActivity baseActivity) {
+        List<WeakReference<BaseActivity>> weakReferenceList = new ArrayList<>();
+        for (WeakReference<BaseActivity> reference : mActivityStack) {
+            if (reference != null && reference.get() != null) {
+                if (!reference.get().getClass().getName().equals(baseActivity.getClass().getName())) {
+                    weakReferenceList.add(reference);
+                }
+            }
+        }
+        for (WeakReference<BaseActivity> reference : weakReferenceList) {
+            reference.get().finish();
+        }
+    }
+
+    public void removeActivity(BaseActivity baseActivity) {
+        WeakReference<BaseActivity> weak = null;
+        for (WeakReference<BaseActivity> reference : mActivityStack) {
+            if (reference != null && reference.get() != null) {
+                if (reference.get().getClass().getName().equals(baseActivity.getClass().getName())) {
+                    weak = reference;
+                    break;
+                }
+            }
+        }
+        if (weak != null) {
+            mActivityStack.remove(weak);
+        }
+    }
+
+    public void finishActivity(Class<?> cls) {
+        WeakReference<BaseActivity> weak = null;
+        for (WeakReference<BaseActivity> reference : mActivityStack) {
+            if (reference != null && reference.get() != null) {
+                if (reference.get().getClass().getName().equals(cls.getName())) {
+                    weak = reference;
+                    break;
+                }
+            }
+        }
+        if (weak != null) {
+            weak.get().finish();
+        }
+    }
+
+    public void removeActivity(Class<?> cls) {
+        WeakReference<BaseActivity> weak = null;
+        for (WeakReference<BaseActivity> reference : mActivityStack) {
+            if (reference != null && reference.get() != null) {
+                if (reference.get().getClass().getName().equals(cls.getName())) {
+                    weak = reference;
+                    break;
+                }
+            }
+        }
+        if (weak != null) {
+            mActivityStack.remove(weak);
+        }
+    }
+
+    public void clearActivity() {
+        Stack<WeakReference<BaseActivity>> tempStack = new Stack<>();
+        tempStack.addAll(mActivityStack);
+        for (WeakReference<BaseActivity> reference : tempStack) {
+            if (reference != null && reference.get() != null) {
+                reference.get().finish();
+            }
+        }
+        mActivityStack.clear();
+    }
+
+    public BaseActivity getTopActivity() {
+        WeakReference<BaseActivity> weak = null;
+        try {
+            weak = mActivityStack.peek();
+        } catch (Exception e) {
+        }
+        if (weak != null) {
+            return weak.get();
         }
         return null;
     }

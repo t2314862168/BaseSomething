@@ -84,14 +84,11 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
 
     protected abstract P createPresenter();
 
-    protected abstract void initTSubscriber();
-
     protected void bindButterKnife() {
         ButterKnife.bind(this, mView);
     }
 
     protected void init() {
-        initTSubscriber();
         initAdapter();
         initData();
         initListener();
@@ -113,7 +110,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     protected void receiveBundleFromActivity(Bundle arg) {
-       
+
     }
 
     @Override
