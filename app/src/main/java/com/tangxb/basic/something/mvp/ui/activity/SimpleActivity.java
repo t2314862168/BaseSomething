@@ -107,12 +107,6 @@ public class SimpleActivity extends BaseActivity implements BaseActivityView {
                 loadData();
             }
         });
-
-        try {
-            testLoginUser();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     UserLoginResultBean userLoginResultBean;
@@ -172,8 +166,8 @@ public class SimpleActivity extends BaseActivity implements BaseActivityView {
      * 注意每次的Observable和Subscriber都需要新生成
      */
     private void loadData() {
-//        initTSubscriber();
-//        mvpPresenter.addSubscription(mvpPresenter.createObservable(category, pageSize, pageNum), tSubscriber);
+        initTSubscriber();
+        mvpPresenter.addSubscription(mvpPresenter.createObservable(category, pageSize, pageNum), tSubscriber);
     }
 
     protected void initTSubscriber() {

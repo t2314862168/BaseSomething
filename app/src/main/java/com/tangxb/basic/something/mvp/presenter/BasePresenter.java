@@ -49,19 +49,27 @@ public class BasePresenter<V> {
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();
         }
-        mCompositeDisposable.add(observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(consumer, mDefaultConsumerThrowable));
+        try {
+            mCompositeDisposable.add(observable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(consumer, mDefaultConsumerThrowable));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public <T> void addSubscription(Observable<T> observable, Consumer<T> consumer, Consumer<Throwable> onError) {
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();
         }
-        mCompositeDisposable.add(observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(consumer, onError));
+        try {
+            mCompositeDisposable.add(observable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(consumer, onError));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
