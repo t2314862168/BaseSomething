@@ -18,9 +18,7 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/iv_check"
+        android:layout_centerInParent="true"
         android:text="马未都"
         android:textSize="18sp" />
 </RelativeLayout>

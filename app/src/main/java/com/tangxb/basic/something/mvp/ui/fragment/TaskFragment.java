@@ -1,13 +1,13 @@
 package com.tangxb.basic.something.mvp.ui.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.chanven.lib.cptr.PtrClassicFrameLayoutEx;
 import com.chanven.lib.cptr.PtrDefaultHandlerEx;
@@ -15,19 +15,20 @@ import com.chanven.lib.cptr.PtrFrameLayoutEx;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.tangxb.basic.something.R;
+import com.tangxb.basic.something.bean.PurchaseUserBean;
+import com.tangxb.basic.something.decoration.MDividerItemDecoration;
 import com.tangxb.basic.something.mvp.presenter.BasePresenter;
 import com.tangxb.basic.something.mvp.presenter.TaskFragmentPresenter;
 import com.tangxb.basic.something.mvp.ui.activity.AssignTaskActivity;
+import com.tangxb.basic.something.mvp.ui.activity.HomeActivity;
 import com.tangxb.basic.something.mvp.view.TaskFragmentView;
-import com.tangxb.basic.something.tools.encrypt.MessageDigestUtils;
+import com.tangxb.basic.something.util.ConstUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 
@@ -44,11 +45,14 @@ public class TaskFragment extends BaseFragment implements TaskFragmentView {
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     private String fragmentName;
-    private List<String> mDataList = new ArrayList<>();
-    private CommonAdapter<String> commonAdapter;
+    private List<PurchaseUserBean> mDataList = new ArrayList<>();
+    private CommonAdapter<PurchaseUserBean> commonAdapter;
     private TaskFragmentPresenter presenter;
-    private Handler handler = new Handler();
-    private int pageNum = 0;
+    /**
+     * 注意这里mPageNum是从1开始的不是从0开始的
+     */
+    private int mPageNum = 1;
+    private final int mPageSize = ConstUtils.PAGE_SIZE;
     private RecyclerAdapterWithHF mAdapter;
 
     public static TaskFragment getInstance(String name) {
@@ -77,30 +81,23 @@ public class TaskFragment extends BaseFragment implements TaskFragmentView {
 
     @Override
     protected void initData() {
-        // 这里开始调试接口,请用restful风格
-        Map<String, String> data = new HashMap<>();
-        int page = 0;
-        int rows = 12;
-        data.put("page", String.valueOf(page));
-        data.put("rows", String.valueOf(rows));
-        String token = mApplication.getUserLoginResultBean().getUser().getToken();
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        String signatrue = MessageDigestUtils.getSign(data, token, timestamp);
-        presenter.getUserList(mApplication, token, signatrue, timestamp, page, rows);
-
-        commonAdapter = new CommonAdapter<String>(mActivity, R.layout.item_rv_task, mDataList) {
+        commonAdapter = new CommonAdapter<PurchaseUserBean>(mActivity, R.layout.item_rv_task, mDataList) {
             @Override
-            protected void convert(ViewHolder holder, String s, final int position) {
+            protected void convert(ViewHolder holder, PurchaseUserBean bean, final int position) {
+                ImageView imageView = holder.getView(R.id.iv);
+                String imageUrl = "http://p1.so.qhimgs1.com/t01587cbad79fdeaee1.jpg";
+                mApplication.getImageLoaderFactory().loadCircleOrReboundImgByUrl(mFragment, imageUrl, imageView);
                 holder.setOnClickListener(R.id.rl_item, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         itemOnClick(position);
                     }
                 });
+                holder.setText(R.id.tv_name, bean.getNickname());
                 holder.setOnClickListener(R.id.iv_call_phone, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(getActivity(), "你点击了的item-" + position + "的电话图标", Toast.LENGTH_SHORT).show();
+                        mobileOnClick(position);
                     }
                 });
             }
@@ -108,58 +105,108 @@ public class TaskFragment extends BaseFragment implements TaskFragmentView {
         mAdapter = new RecyclerAdapterWithHF((MultiItemTypeAdapter) commonAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mRecyclerView.setAdapter(mAdapter);
-
-        ptrClassicFrameLayout.postDelayed(new Runnable() {
-
+        mRecyclerView.addItemDecoration(new MDividerItemDecoration(mActivity, LinearLayout.VERTICAL, R.drawable.item_for_divider));
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void run() {
-                ptrClassicFrameLayout.autoRefresh(true);
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    mApplication.getImageLoaderFactory().resumeRequests(mFragment);
+                } else {
+                    mApplication.getImageLoaderFactory().pauseRequests(mFragment);
+                }
             }
-        }, 200);
+        });
         ptrClassicFrameLayout.setPtrHandler(new PtrDefaultHandlerEx() {
-
             @Override
             public void onRefreshBegin(PtrFrameLayoutEx frame) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNum = 0;
-                        mDataList.clear();
-                        // 模拟数据
-                        for (int i = 0; i < 10; i++) {
-                            mDataList.add("str" + i);
-                        }
-                        // 注意使用notifyItemRangeChangedHF在下拉刷新的时候,由于之前clear会出现数据不同步问题
-                        mAdapter.notifyDataSetChangedHF();
-                        ptrClassicFrameLayout.refreshComplete();
-                        ptrClassicFrameLayout.setLoadMoreEnable(true);
-                    }
-                }, 3500);
+                refreshGetData();
             }
         });
         ptrClassicFrameLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-
             @Override
             public void loadMore() {
-                handler.postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        int beforeChangeSize = mDataList.size() + mAdapter.getHeadSize() + 1;
-                        int size = 5;
-                        for (int i = 0; i < size; i++) {
-                            mDataList.add(new String("  RecyclerView item  - add " + pageNum));
-                        }
-                        mAdapter.notifyItemRangeInsertedHF(beforeChangeSize, size);
-                        ptrClassicFrameLayout.loadMoreComplete(false);
-                    }
-                }, 1000);
+                loadMoreGetData();
             }
         });
+        ptrClassicFrameLayout.autoRefresh(true);
     }
 
+    /**
+     * 跳转到打电话界面
+     *
+     * @param position
+     */
+    public void mobileOnClick(int position) {
+        try {
+            String phoneNumber = mDataList.get(position).getMobile();
+            Intent Intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:" + phoneNumber));
+            startActivity(Intent);
+        } catch (Exception e) {
+            // 如果用户之前没有授予打电话权限,请重新授予
+            if (mActivity instanceof HomeActivity) {
+                ((HomeActivity) mActivity).storageTask();
+            }
+        }
+    }
+
+    /**
+     * 跳转到分配任务界面
+     *
+     * @param position
+     */
     public void itemOnClick(int position) {
         Intent intent = new Intent(mActivity, AssignTaskActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void stopLoadData() {
+        if (mPageNum == 1) { // 下拉刷新
+            ptrClassicFrameLayout.refreshComplete();
+            ptrClassicFrameLayout.setLoadMoreEnable(false);
+        } else { // 上拉加载
+            ptrClassicFrameLayout.loadMoreComplete(false);
+        }
+    }
+
+    @Override
+    public void refreshGetData() {
+        resetPageNum();
+        presenter.getPurchaseUserList(mApplication, mPageNum, mPageSize);
+    }
+
+    @Override
+    public void loadMoreGetData() {
+        mPageNum++;
+        presenter.getPurchaseUserList(mApplication, mPageNum, mPageSize);
+    }
+
+    @Override
+    public void resetPageNum() {
+        mPageNum = 1;
+    }
+
+    @Override
+    public void operateSuccess(List<PurchaseUserBean> baseBean) {
+        if (mPageNum == 1) { // 下拉刷新
+            mDataList.clear();
+            if (baseBean != null && baseBean.size() > 0) {
+                mDataList.addAll(baseBean);
+            }
+            mAdapter.notifyDataSetChangedHF();
+            ptrClassicFrameLayout.refreshComplete();
+            ptrClassicFrameLayout.setLoadMoreEnable(true);
+            if (baseBean.size() < ConstUtils.PAGE_SIZE) {
+                ptrClassicFrameLayout.loadMoreComplete(false);
+            }
+        } else { // 上拉加载
+            int beforeChangeSize = mDataList.size() + mAdapter.getHeadSize() + 1;
+            int getDataSize = (baseBean == null ? 0 : baseBean.size());
+            if (getDataSize != 0) {
+                mDataList.addAll(baseBean);
+                mAdapter.notifyItemRangeInsertedHF(beforeChangeSize, getDataSize);
+            }
+            ptrClassicFrameLayout.loadMoreComplete(false);
+        }
     }
 }

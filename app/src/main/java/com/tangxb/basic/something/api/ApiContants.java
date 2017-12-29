@@ -13,5 +13,5 @@ public class ApiContants {
     public static final String standard = "http://47.97.243.153/vegetable/";
 //    public static String SERVICE = standard1;
 //    public static String BASEURL = "http://gank.io/api/";
-    public static String BASEURL = standard;
+    public static String BASEURL = standard1;
 }

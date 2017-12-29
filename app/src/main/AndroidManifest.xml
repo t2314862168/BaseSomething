@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -36,16 +37,28 @@
             android:name="UMENG_CHANNEL_VALUE"
             android:value="${UMENG_CHANNEL_VALUE}" />
 
-        <activity android:name=".mvp.ui.activity.LoginActivity">
+        <activity
+            android:name=".mvp.ui.activity.LoginActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".mvp.ui.activity.HomeActivity" />
-        <activity android:name=".mvp.ui.activity.AssignPermissionActivity" />
-        <activity android:name=".mvp.ui.activity.AssignTaskActivity" />
+        <activity
+            android:name=".mvp.ui.activity.HomeActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.AssignPermissionActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.AssignTaskActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

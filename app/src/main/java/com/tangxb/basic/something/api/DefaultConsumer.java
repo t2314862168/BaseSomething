@@ -1,7 +1,9 @@
 package com.tangxb.basic.something.api;
 
+import com.tangxb.basic.something.MApplication;
 import com.tangxb.basic.something.bean.MBaseBean;
 import com.tangxb.basic.something.util.MLogUtils;
+import com.tangxb.basic.something.util.ToastUtils;
 
 import io.reactivex.functions.Consumer;
 
@@ -16,6 +18,15 @@ public abstract class DefaultConsumer<T> implements Consumer<MBaseBean<T>> {
      * 服务器操作成功的状态码
      */
     private final int successCode = 1;
+    /**
+     * token错误的状态码
+     */
+    private final int tokenErrorCode = 5;
+    private MApplication mApplication;
+
+    public DefaultConsumer(MApplication mApplication) {
+        this.mApplication = mApplication;
+    }
 
     /**
      * 后台返回操作成功调用
@@ -25,21 +36,35 @@ public abstract class DefaultConsumer<T> implements Consumer<MBaseBean<T>> {
     public abstract void operateSuccess(MBaseBean<T> baseBean);
 
     /**
+     * token错误的时候使用,token的优先级高于{@link #operateError(String)}
+     */
+    public void tokenError(String message) {
+        if (mApplication == null) return;
+        ToastUtils.t(mApplication, message);
+    }
+
+    /**
      * 请在需要的时候打印数据
      *
      * @param message
      */
     public void operateError(String message) {
-
+        if (mApplication == null) return;
+        ToastUtils.t(mApplication, message);
     }
 
     @Override
     public void accept(MBaseBean<T> baseBean) throws Exception {
-        if (baseBean.getCode() == successCode) {
+        int code = baseBean.getCode();
+        String message = baseBean.getMessage();
+        if (code == successCode) {
             operateSuccess(baseBean);
+        } else if (code == tokenErrorCode) {
+            tokenError(message);
+            MLogUtils.d(TAG, message);
         } else {
-            operateError(baseBean.getMessage());
-            MLogUtils.d(TAG, baseBean.getMessage());
+            operateError(message);
+            MLogUtils.d(TAG, message);
         }
     }
 }

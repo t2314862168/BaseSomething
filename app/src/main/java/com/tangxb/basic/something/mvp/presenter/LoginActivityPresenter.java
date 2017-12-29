@@ -27,7 +27,7 @@ public class LoginActivityPresenter extends BaseActivityPresenter {
     }
 
     public void loginUser(final MApplication mApplication, String username, String password) {
-        addSubscription(loginUserLogic(username, password), new DefaultConsumer<UserLoginResultBean>() {
+        addSubscription(loginUserLogic(username, password), new DefaultConsumer<UserLoginResultBean>(mApplication) {
             @Override
             public void operateSuccess(MBaseBean<UserLoginResultBean> baseBean) {
                 mApplication.setUserLoginResultBean(baseBean.getData());
@@ -36,7 +36,7 @@ public class LoginActivityPresenter extends BaseActivityPresenter {
 
             @Override
             public void operateError(String message) {
-                ToastUtils.t(mApplication, message);
+                super.operateError(message);
                 activityView.hiddenDialog();
             }
         }, new DefaultConsumerThrowable() {

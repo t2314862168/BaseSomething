@@ -64,21 +64,21 @@ public class GlideLoaderFactory extends ImageLoaderFactory {
 
     @Override
     public void resumeRequests(Activity activity) {
-
+        getImageLoaderInter().resumeRequests(activity);
     }
 
     @Override
     public void resumeRequests(Fragment fragment) {
-
+        getImageLoaderInter().resumeRequests(fragment);
     }
 
     @Override
     public void pauseRequests(Activity activity) {
-
+        getImageLoaderInter().pauseRequests(activity);
     }
 
     @Override
     public void pauseRequests(Fragment fragment) {
-
+        getImageLoaderInter().pauseRequests(fragment);
     }
 }

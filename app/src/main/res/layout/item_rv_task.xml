@@ -3,16 +3,14 @@
     android:id="@+id/rl_item"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    android:paddingTop="12dp">
+    android:paddingTop="10dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_marginLeft="20dp" />
 
     <TextView
         android:id="@+id/tv_name"

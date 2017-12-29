@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tangxb.basic.something.R;
 
 /**
@@ -33,6 +34,7 @@ public class GlideLoaderInterImpl implements ImageLoaderInter {
                 .placeholder(placeholderResId)
                 .error(errorResId)
                 .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
                 .into(imageView);
     }
@@ -50,6 +52,7 @@ public class GlideLoaderInterImpl implements ImageLoaderInter {
                 .placeholder(placeholderResId)
                 .error(errorResId)
                 .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
                 .into(imageView);
     }
@@ -67,6 +70,7 @@ public class GlideLoaderInterImpl implements ImageLoaderInter {
                 .placeholder(placeholderResId)
                 .error(errorResId)
                 .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .dontAnimate()
                 .into(imageView);
     }
@@ -84,27 +88,36 @@ public class GlideLoaderInterImpl implements ImageLoaderInter {
                 .placeholder(placeholderResId)
                 .error(errorResId)
                 .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .dontAnimate()
                 .into(imageView);
     }
 
     @Override
     public void resumeRequests(Activity activity) {
-        Glide.with(activity).resumeRequests();
+        if (Glide.with(activity).isPaused()) {
+            Glide.with(activity).resumeRequests();
+        }
     }
 
     @Override
     public void resumeRequests(Fragment fragment) {
-        Glide.with(fragment).resumeRequests();
+        if (Glide.with(fragment).isPaused()) {
+            Glide.with(fragment).resumeRequests();
+        }
     }
 
     @Override
     public void pauseRequests(Activity activity) {
-        Glide.with(activity).pauseRequests();
+        if (!Glide.with(activity).isPaused()) {
+            Glide.with(activity).pauseRequests();
+        }
     }
 
     @Override
     public void pauseRequests(Fragment fragment) {
-        Glide.with(fragment).pauseRequests();
+        if (!Glide.with(fragment).isPaused()) {
+            Glide.with(fragment).pauseRequests();
+        }
     }
 }

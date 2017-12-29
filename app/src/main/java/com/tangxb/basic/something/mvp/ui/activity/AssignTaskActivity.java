@@ -27,6 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import qiu.niorgai.StatusBarCompat;
 
 /**
  * Created by Taxngb on 2017/12/25.
@@ -64,6 +65,7 @@ public class AssignTaskActivity extends BaseActivity implements AssignTaskActivi
 
     @Override
     protected void initData() {
+        StatusBarCompat.setStatusBarColor(mActivity, mResources.getColor(R.color.material_red_400));
         commonAdapter = new CommonAdapter<String>(this, R.layout.item_rv_assign_task, mDataList) {
             @Override
             protected void convert(ViewHolder holder, String s, final int position) {

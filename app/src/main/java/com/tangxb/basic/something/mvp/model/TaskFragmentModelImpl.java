@@ -3,6 +3,9 @@ package com.tangxb.basic.something.mvp.model;
 import com.tangxb.basic.something.RetrofitRxClient;
 import com.tangxb.basic.something.api.TaskRxAPI;
 import com.tangxb.basic.something.bean.MBaseBean;
+import com.tangxb.basic.something.bean.PurchaseUserBean;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -13,7 +16,7 @@ import io.reactivex.Observable;
 public class TaskFragmentModelImpl implements TaskFragmentModel {
 
     @Override
-    public Observable<MBaseBean<String>> getUserList(String token, String signatrue, String timestamp, int page, int rows) {
-        return RetrofitRxClient.INSTANCE.getRetrofit().create(TaskRxAPI.class).getUserList(token, signatrue, timestamp, page, rows);
+    public Observable<MBaseBean<List<PurchaseUserBean>>> getPurchaseUserList(String token, String signatrue, String timestamp, int page, int rows) {
+        return RetrofitRxClient.INSTANCE.getRetrofit().create(TaskRxAPI.class).getPurchaseUserList(token, signatrue, timestamp, page, rows);
     }
 }

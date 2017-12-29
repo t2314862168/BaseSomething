@@ -3,6 +3,7 @@ package com.tangxb.basic.something.mvp.ui.activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +14,6 @@ import com.tangxb.basic.something.mvp.presenter.BasePresenter;
 import com.tangxb.basic.something.mvp.presenter.LoginActivityPresenter;
 import com.tangxb.basic.something.mvp.view.LoginActivityView;
 import com.tangxb.basic.something.util.ConstUtils;
-import com.tangxb.basic.something.util.MDrawableUtils;
 import com.tangxb.basic.something.util.SPUtils;
 import com.tangxb.basic.something.util.ToastUtils;
 
@@ -62,7 +62,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
             til_password.getEditText().setText(password);
             mRememberPwdFlag = true;
             int resId = mRememberPwdFlag ? R.drawable.ic_check_box_red_400_24dp : R.drawable.ic_check_box_outline_blank_grey_700_24dp;
-            Drawable drawable = MDrawableUtils.getDrawable(mResources, resId);
+            Drawable drawable = ContextCompat.getDrawable(mActivity, resId);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mRememberPwdTv.setCompoundDrawables(drawable, null, null, null);
         }
@@ -96,8 +96,12 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
     private void saveAccountLoginInfo(String username, String password) {
         if (!mRememberPwdFlag) return;
         boolean contains = SPUtils.contains(mApplication, ConstUtils.ACCOUNT_KEY);
-        if (!contains && mRememberPwdFlag) {
+        String username_1 = (String) SPUtils.get(mApplication, ConstUtils.ACCOUNT_KEY, "");
+        String password_1 = (String) SPUtils.get(mApplication, ConstUtils.PASSWORD_KEY, "");
+        if (!TextUtils.isEmpty(username) && username.trim().length() > 0 && !username.equals(username_1)) {
             SPUtils.put(mApplication, ConstUtils.ACCOUNT_KEY, username);
+        }
+        if (!TextUtils.isEmpty(password) && password.trim().length() > 0 && !password.equals(password_1)) {
             SPUtils.put(mApplication, ConstUtils.PASSWORD_KEY, password);
         }
     }
@@ -185,7 +189,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
     public void clickRememberPwdTv(View view) {
         mRememberPwdFlag = !mRememberPwdFlag;
         int resId = mRememberPwdFlag ? R.drawable.ic_check_box_red_400_24dp : R.drawable.ic_check_box_outline_blank_grey_700_24dp;
-        Drawable drawable = MDrawableUtils.getDrawable(mResources, resId);
+        Drawable drawable = ContextCompat.getDrawable(mActivity, resId);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mRememberPwdTv.setCompoundDrawables(drawable, null, null, null);
     }

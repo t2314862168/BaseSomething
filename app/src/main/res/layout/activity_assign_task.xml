@@ -3,25 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <include layout="@layout/layout_common_top" />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rl_item"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/colorPrimary">
+        android:layout_marginTop="40dp"
+        android:paddingTop="12dp">
 
         <ImageView
-            android:id="@+id/iv_back"
+            android:id="@+id/iv_check"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
             android:scaleType="center"
-            android:src="@drawable/ic_arrow_back_white_24dp" />
+            android:src="@drawable/ic_check_box_red_400_24dp" />
 
         <TextView
+            android:id="@+id/tv_check_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/iv_check"
+            android:text="全选"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="选择任务"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:text="名字"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <include
@@ -29,37 +44,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="40dp"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="80dp" />
 
-    <LinearLayout
+    <include
+        layout="@layout/layout_common_bottom"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorAccent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="取消"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/white" />
-
-        <TextView
-            android:id="@+id/tv_commit"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="提交"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-    </LinearLayout>
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

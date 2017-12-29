@@ -15,7 +15,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
-
+#抛出异常时保留代码行号
+-keepattributes SourceFile,LineNumberTable
 #glide start
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
@@ -24,7 +25,7 @@
 }
 
 # for DexGuard only
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+#-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 #glide end
 
 # eventbus used start
@@ -71,6 +72,20 @@ public static final int *;
 -keepattributes Exceptions
 # retrofit2 end
 
+# RxJava RxAndroid start
+-dontwarn sun.misc.**
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+# RxJava RxAndroid end
+
 # ButterKnife start
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
@@ -94,7 +109,7 @@ public static java.lang.String TABLENAME;
 # If you do not use SQLCipher:
 -dontwarn org.greenrobot.greendao.database.**
 # If you do not use Rx:
-#-dontwarn rx.**
+-dontwarn rx.**
 #greenDAO end
 
 #okhttp
@@ -104,3 +119,12 @@ public static java.lang.String TABLENAME;
 #okio
 -dontwarn okio.**
 -keep class okio.**{*;}
+
+# bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+
+# SweetAlert
+-keep class cn.pedant.SweetAlert.Rotate3dAnimation {
+    public <init>(...);
+ }

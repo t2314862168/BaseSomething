@@ -141,4 +141,24 @@ public class PermissionFragment extends BaseFragment implements PermissionFragme
         Intent intent = new Intent(mActivity, AssignPermissionActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void stopLoadData() {
+
+    }
+
+    @Override
+    public void refreshGetData() {
+
+    }
+
+    @Override
+    public void loadMoreGetData() {
+
+    }
+
+    @Override
+    public void resetPageNum() {
+
+    }
 }
