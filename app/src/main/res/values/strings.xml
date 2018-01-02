@@ -8,4 +8,5 @@
     <string name="password">密码</string>
     <string name="login">登录</string>
     <string name="apply_permission_tips">应用正在申请访问内存和打电话权限</string>
+    <string name="please_input_limit_pwd">请输入数字或字母</string>
 </resources>
