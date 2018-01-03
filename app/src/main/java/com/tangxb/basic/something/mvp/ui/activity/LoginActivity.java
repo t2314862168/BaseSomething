@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,10 +26,10 @@ import com.tangxb.basic.something.mvp.view.LoginActivityView;
 import com.tangxb.basic.something.util.ConstUtils;
 import com.tangxb.basic.something.util.SPUtils;
 import com.tangxb.basic.something.util.ToastUtils;
+import com.tangxb.basic.something.view.AlertProgressDialog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import qiu.niorgai.StatusBarCompat;
 
 /**
@@ -55,7 +56,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView, Ke
     View cardView;
     private boolean mRememberPwdFlag;
     private int i = -1;
-    private SweetAlertDialog mSweetAlertDialog;
+    private AlertDialog mAlertDialog;
     private KeyboardWatcher keyboardWatcher;
     private int screenHeight = 0;//屏幕高度
     /**
@@ -237,11 +238,11 @@ public class LoginActivity extends BaseActivity implements LoginActivityView, Ke
      */
     @Override
     public void showDialog() {
-        mSweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
-                .setTitleText(mResources.getString(R.string.login_ing));
-        mSweetAlertDialog.setCancelable(false);
-        mSweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.warning_stroke_color));
-        mSweetAlertDialog.show();
+        mAlertDialog = new AlertProgressDialog.Builder(mActivity)
+                .setView(R.layout.layout_alert_dialog)
+                .setCancelable(false)
+                .setMessage(R.string.login_ing)
+                .show();
     }
 
     /**
@@ -249,8 +250,8 @@ public class LoginActivity extends BaseActivity implements LoginActivityView, Ke
      */
     @Override
     public void hiddenDialog() {
-        if (mSweetAlertDialog != null) {
-            mSweetAlertDialog.dismiss();
+        if (mAlertDialog != null) {
+            mAlertDialog.dismiss();
         }
     }
 

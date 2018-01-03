@@ -6,4 +6,5 @@
 
     <color name="colorAccent_2">#DD2C00</color>
     <color name="material_red_400">#EF5350</color>
+    <color name="tint">#f44336</color>
 </resources>

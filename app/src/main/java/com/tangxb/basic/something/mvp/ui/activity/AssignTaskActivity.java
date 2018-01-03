@@ -1,6 +1,5 @@
 package com.tangxb.basic.something.mvp.ui.activity;
 
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +25,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import qiu.niorgai.StatusBarCompat;
 
 /**
@@ -47,7 +45,6 @@ public class AssignTaskActivity extends BaseActivity implements AssignTaskActivi
     private List<String> mDataList = new ArrayList<>();
     private CommonAdapter<String> commonAdapter;
     private int i = -1;
-    private SweetAlertDialog sweetAlertDialog;
     private Handler handler = new Handler();
     private int pageNum = 0;
     private RecyclerAdapterWithHF mAdapter;
@@ -142,52 +139,7 @@ public class AssignTaskActivity extends BaseActivity implements AssignTaskActivi
 
     @Override
     public void showDialog() {
-        sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
-                .setTitleText("提交数据中...");
-        sweetAlertDialog.show();
-        sweetAlertDialog.setCancelable(false);
-        new CountDownTimer(800 * 3, 800) {
-            public void onTick(long millisUntilFinished) {
-                // you can change the progress bar color by ProgressHelper every 800 millis
-                i++;
-                switch (i) {
-                    case 0:
-                        sweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.blue_btn_bg_color));
-                        break;
-                    case 1:
-                        sweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.material_deep_teal_50));
-                        break;
-                    case 2:
-                        sweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.success_stroke_color));
-                        break;
-                    case 3:
-                        sweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.material_deep_teal_20));
-                        break;
-                    case 4:
-                        sweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.material_blue_grey_80));
-                        break;
-                    case 5:
-                        sweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.warning_stroke_color));
-                        break;
-                    case 6:
-                        sweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.success_stroke_color));
-                        break;
-                }
-            }
 
-            public void onFinish() {
-                i = -1;
-                sweetAlertDialog.setTitleText("操作成功")
-                        .setConfirmText("OK")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                sweetAlertDialog.dismiss();
-                            }
-                        })
-                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-            }
-        }.start();
     }
 
     public void commitSuccess() {

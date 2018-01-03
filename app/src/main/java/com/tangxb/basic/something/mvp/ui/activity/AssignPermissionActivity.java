@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by Taxngb on 2017/12/25.
@@ -38,7 +37,6 @@ public class AssignPermissionActivity extends BaseActivity implements AssignPerm
     private List<String> mDataList = new ArrayList<>();
     private CommonAdapter<String> commonAdapter;
     private int i = -1;
-    private SweetAlertDialog sweetAlertDialog;
     private Handler handler = new Handler();
     private int pageNum = 0;
     private RecyclerAdapterWithHF mAdapter;

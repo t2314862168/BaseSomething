@@ -32,6 +32,7 @@ public class AlertProgressDialog {
         private View mView;
         private TextView mContentTv;
         private CharSequence mMessage;
+        private boolean mCancelable;
 
         public Builder(@NonNull Context context) {
             mContext = context;
@@ -59,13 +60,18 @@ public class AlertProgressDialog {
             return this;
         }
 
+        public Builder setCancelable(boolean flag) {
+            mCancelable = flag;
+            return this;
+        }
+
         public AlertDialog show() {
-            mBuilder = new AlertDialog.Builder(mContext);
+            mBuilder = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
             mBuilder.setView(mView);
             if (mContentTv != null) {
                 mContentTv.setText(mMessage);
             }
-            mBuilder.setCancelable(false);
+            mBuilder.setCancelable(mCancelable);
             final AlertDialog dialog = mBuilder.show();
             return dialog;
         }
