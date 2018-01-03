@@ -284,7 +284,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView, Ke
      * 验证密码
      *
      * @param password
-     * @return
+     * @return 验证密码长度
      */
     private boolean validatePassword(String password) {
         if (TextUtils.isEmpty(password)) {
