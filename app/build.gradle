@@ -69,12 +69,16 @@ android {
         release {
             buildConfigField("boolean", "LOG_DEBUG", "false")
             minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             buildConfigField("boolean", "LOG_DEBUG", "true")
-            minifyEnabled true
+            minifyEnabled false
+            shrinkResources true
+            zipAlignEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -99,19 +103,31 @@ android {
     }
 }
 
+// 查看项目的依赖关系,请使用 gradle :app:dependencies 然后使用exclude排除不需要的东西
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.0'
+//    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile('com.android.support:appcompat-v7:25.3.1', {
+        exclude group: 'com.android.support', module: 'support-media-compat'
+        exclude group: 'com.android.support', module: 'support-core-utils'
+//        exclude group: 'com.android.support', module: 'support-vector-drawable'
+        exclude group: 'com.android.support', module: 'animated-vector-drawable'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    })
+    compile 'com.android.support:recyclerview-v7:25.3.1'
     testCompile 'junit:junit:4.12'
 
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile('com.zhy:base-rvadapter:3.0.3', {
         exclude group: 'com.android.support'
     })
-    compile 'com.chanven.lib:cptr:1.1.0'
+//    compile 'com.chanven.lib:cptr:1.1.0'
+    compile('com.chanven.lib:cptr:1.1.0', {
+        exclude group: 'com.android.support'
+    })
     compile 'com.github.medyo:dynamicbox:1.2@aar'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
@@ -120,7 +136,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile 'pub.devrel:easypermissions:0.3.0'
+//    compile 'pub.devrel:easypermissions:0.4.3'
+    compile('pub.devrel:easypermissions:0.4.3', {
+        exclude group: 'com.android.support'
+    })
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.facebook.stetho:stetho:1.5.0'
     compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
@@ -145,7 +164,14 @@ dependencies {
     compile('com.github.niorgai:StatusBarCompat:2.1.4', {
         exclude group: 'com.android.support'
     })
-    compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:cardview-v7:25.1.0'
-    compile 'me.zhanghai.android.materialprogressbar:library:1.4.1'
+//    compile 'com.android.support:design:25.3.1'
+    compile('com.android.support:design:25.3.1', {
+        exclude group: 'com.android.support', module: 'transition'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    })
+    compile 'com.android.support:cardview-v7:25.3.1'
+    compile('me.zhanghai.android.materialprogressbar:library:1.4.1', {
+        exclude group: 'com.android.support'
+    })
 }
