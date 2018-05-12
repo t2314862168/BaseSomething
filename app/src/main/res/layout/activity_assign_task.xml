@@ -5,39 +5,11 @@
 
     <include layout="@layout/layout_common_top" />
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/rl_item"
+    <include
+        layout="@layout/layout_common_content_header"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:paddingTop="12dp">
-
-        <ImageView
-            android:id="@+id/iv_check"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_check_box_red_400_24dp" />
-
-        <TextView
-            android:id="@+id/tv_check_tip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/iv_check"
-            android:text="全选"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="名字"
-            android:textSize="18sp" />
-    </RelativeLayout>
+        android:layout_marginTop="40dp" />
 
     <include
         layout="@layout/layout_common_middle"

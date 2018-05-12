@@ -61,8 +61,6 @@ public class MessageDigestUtils {
             }
         });
 
-        System.out.println(map);
-
         StringBuilder builder = new StringBuilder();
         boolean first = true;
         for(Map.Entry<String, String> item : paramList){
@@ -73,8 +71,6 @@ public class MessageDigestUtils {
             }
             builder.append(item.getKey()).append('=').append(item.getValue());
         }
-
-        System.out.println(builder.toString());
 
         String sign = null;
         try {

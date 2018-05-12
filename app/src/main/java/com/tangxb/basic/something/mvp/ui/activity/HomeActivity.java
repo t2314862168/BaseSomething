@@ -88,4 +88,24 @@ public class HomeActivity extends BaseActivity implements HomeActivityView, Easy
             new AppSettingsDialog.Builder(this).build().show();
         }
     }
+
+    @Override
+    public void stopLoadData() {
+
+    }
+
+    @Override
+    public void refreshGetData() {
+
+    }
+
+    @Override
+    public void loadMoreGetData() {
+
+    }
+
+    @Override
+    public void resetPageNum() {
+
+    }
 }

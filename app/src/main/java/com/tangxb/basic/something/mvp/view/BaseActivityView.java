@@ -5,5 +5,23 @@ package com.tangxb.basic.something.mvp.view;
  */
 
 public interface BaseActivityView extends BaseView {
-    
+    /**
+     * 停止加载数据
+     */
+    void stopLoadData();
+
+    /**
+     * 下拉刷新获取数据
+     */
+    void refreshGetData();
+
+    /**
+     * 上拉加载数据
+     */
+    void loadMoreGetData();
+
+    /**
+     * 重置页数
+     */
+    void resetPageNum();
 }

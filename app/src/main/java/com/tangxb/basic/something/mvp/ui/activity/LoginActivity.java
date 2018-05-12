@@ -349,4 +349,24 @@ public class LoginActivity extends BaseActivity implements LoginActivityView, Ke
         mAnimatorTranslateY.setInterpolator(new AccelerateDecelerateInterpolator());
         mAnimatorTranslateY.start();
     }
+
+    @Override
+    public void stopLoadData() {
+
+    }
+
+    @Override
+    public void refreshGetData() {
+
+    }
+
+    @Override
+    public void loadMoreGetData() {
+
+    }
+
+    @Override
+    public void resetPageNum() {
+
+    }
 }

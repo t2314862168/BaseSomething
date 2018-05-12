@@ -44,6 +44,12 @@ public class PermissionBean {
     @Expose
     @SerializedName("key")
     private String key;
+    /**
+     * 是否被选中
+     */
+    @Expose
+    @SerializedName("check")
+    private boolean isCheck;
 
     public PermissionBean(int id, String name) {
         this.id = id;
@@ -51,6 +57,14 @@ public class PermissionBean {
     }
 
     public PermissionBean() {
+    }
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
     }
 
     public int getId() {

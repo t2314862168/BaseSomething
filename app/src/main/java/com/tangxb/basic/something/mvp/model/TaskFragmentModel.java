@@ -12,5 +12,15 @@ import io.reactivex.Observable;
  */
 
 public interface TaskFragmentModel extends MBaseModel {
+    /**
+     * 获取采购人
+     *
+     * @param token
+     * @param signatrue
+     * @param timestamp
+     * @param page
+     * @param rows
+     * @return
+     */
     Observable<MBaseBean<List<PurchaseUserBean>>> getPurchaseUserList(String token, String signatrue, String timestamp, int page, int rows);
 }

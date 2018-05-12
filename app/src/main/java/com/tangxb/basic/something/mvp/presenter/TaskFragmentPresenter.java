@@ -30,6 +30,13 @@ public class TaskFragmentPresenter extends BaseFragmentPresenter {
         fragmentModel = new TaskFragmentModelImpl();
     }
 
+    /**
+     * 获取采购人
+     *
+     * @param mApplication
+     * @param page
+     * @param rows
+     */
     public void getPurchaseUserList(final MApplication mApplication, int page, int rows) {
         Map<String, String> data = new HashMap<>();
         data.put("page", String.valueOf(page));
@@ -63,6 +70,16 @@ public class TaskFragmentPresenter extends BaseFragmentPresenter {
         });
     }
 
+    /**
+     * 获取采购人
+     *
+     * @param token
+     * @param signatrue
+     * @param timestamp
+     * @param page
+     * @param rows
+     * @return
+     */
     private Observable<MBaseBean<List<PurchaseUserBean>>> getPurchaseUserList(String token, String signatrue, String timestamp, int page, int rows) {
         return fragmentModel.getPurchaseUserList(token, signatrue, timestamp, page, rows);
     }

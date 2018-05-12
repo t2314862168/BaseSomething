@@ -94,6 +94,7 @@ public class TaskFragment extends BaseFragment implements TaskFragmentView {
                     }
                 });
                 holder.setText(R.id.tv_name, bean.getNickname());
+                holder.setText(R.id.tv_address, bean.getAddress());
                 holder.setOnClickListener(R.id.iv_call_phone, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -156,6 +157,7 @@ public class TaskFragment extends BaseFragment implements TaskFragmentView {
      */
     public void itemOnClick(int position) {
         Intent intent = new Intent(mActivity, AssignTaskActivity.class);
+        intent.putExtra("userId", mDataList.get(position).getId());
         startActivity(intent);
     }
 

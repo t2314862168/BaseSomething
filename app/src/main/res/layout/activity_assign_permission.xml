@@ -3,62 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <include layout="@layout/layout_common_top" />
+
+    <include
+        layout="@layout/layout_common_content_header"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/colorPrimary">
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_arrow_back_white_24dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="选择权限"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-    </RelativeLayout>
+        android:layout_marginTop="40dp" />
 
     <include
         layout="@layout/layout_common_middle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="40dp"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="80dp" />
 
-    <LinearLayout
+    <include
+        layout="@layout/layout_common_bottom"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorAccent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="取消"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/white" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="提交"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-    </LinearLayout>
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

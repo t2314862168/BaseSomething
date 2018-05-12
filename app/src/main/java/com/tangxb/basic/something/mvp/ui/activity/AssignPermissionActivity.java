@@ -1,9 +1,13 @@
 package com.tangxb.basic.something.mvp.ui.activity;
 
-import android.os.Handler;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.chanven.lib.cptr.PtrClassicFrameLayoutEx;
 import com.chanven.lib.cptr.PtrDefaultHandlerEx;
@@ -11,18 +15,28 @@ import com.chanven.lib.cptr.PtrFrameLayoutEx;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.tangxb.basic.something.R;
+import com.tangxb.basic.something.bean.PermissionBean;
+import com.tangxb.basic.something.bean.PurchaseGroupBean;
+import com.tangxb.basic.something.decoration.MDividerItemDecoration;
 import com.tangxb.basic.something.mvp.presenter.AssignPermissionActivityPresenter;
 import com.tangxb.basic.something.mvp.presenter.BasePresenter;
 import com.tangxb.basic.something.mvp.view.AssignPermissionActivityView;
-import com.tangxb.basic.something.util.ToastUtils;
+import com.tangxb.basic.something.util.ConstUtils;
+import com.tangxb.basic.something.view.AlertProgressDialog;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import qiu.niorgai.StatusBarCompat;
 
 /**
  * Created by Taxngb on 2017/12/25.
@@ -33,13 +47,37 @@ public class AssignPermissionActivity extends BaseActivity implements AssignPerm
     PtrClassicFrameLayoutEx ptrClassicFrameLayout;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+    /**
+     * 标题文字
+     */
+    @BindView(R.id.tv_title)
+    TextView mTitleTv;
+    /**
+     * 全选按钮
+     */
+    @BindView(R.id.iv_check_all)
+    ImageView mCheckAllIv;
+    /**
+     * 全选文字
+     */
+    @BindView(R.id.tv_check_tip)
+    TextView mCheckAllTv;
+    /**
+     * 提交按钮
+     */
+    @BindView(R.id.tv_commit)
+    TextView mCommitTv;
     private AssignPermissionActivityPresenter presenter;
-    private List<String> mDataList = new ArrayList<>();
-    private CommonAdapter<String> commonAdapter;
-    private int i = -1;
-    private Handler handler = new Handler();
-    private int pageNum = 0;
+    private List<PermissionBean> mDataList = new ArrayList<>();
+    private CommonAdapter<PermissionBean> commonAdapter;
     private RecyclerAdapterWithHF mAdapter;
+    /**
+     * 注意这里mPageNum是从1开始的不是从0开始的
+     */
+    private int mPageNum = 1;
+    private final int mPageSize = ConstUtils.PAGE_SIZE;
+    private long roleId;
+    private AlertDialog mAlertDialog;
 
     @Override
     protected BasePresenter createPresenter() {
@@ -53,14 +91,26 @@ public class AssignPermissionActivity extends BaseActivity implements AssignPerm
     }
 
     @Override
+    protected void receivePassDataIfNeed(Intent intent) {
+        roleId = intent.getLongExtra("roleId", -1L);
+    }
+
+    @Override
     protected void initData() {
-        commonAdapter = new CommonAdapter<String>(this, R.layout.item_rv_assign_permission, mDataList) {
+        mTitleTv.setText(R.string.choose_permission);
+        int resId = R.drawable.ic_check_box_outline_blank_grey_700_24dp;
+        mCheckAllIv.setImageResource(resId);
+        StatusBarCompat.setStatusBarColor(mActivity, mResources.getColor(R.color.material_red_400));
+        commonAdapter = new CommonAdapter<PermissionBean>(this, R.layout.item_rv_assign_permission, mDataList) {
             @Override
-            protected void convert(ViewHolder holder, String s, final int position) {
+            protected void convert(ViewHolder holder, PermissionBean bean, final int position) {
+                holder.setText(R.id.tv_name, bean.getName());
+                int resId = bean.isCheck() ? R.drawable.ic_check_box_red_400_24dp : R.drawable.ic_check_box_outline_blank_grey_700_24dp;
+                holder.setImageResource(R.id.iv_check, resId);
                 holder.setOnClickListener(R.id.rl_item, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ToastUtils.t(mApplication, "你点击了的item-" + position);
+                        clickItem(position);
                     }
                 });
             }
@@ -68,53 +118,189 @@ public class AssignPermissionActivity extends BaseActivity implements AssignPerm
         mAdapter = new RecyclerAdapterWithHF((MultiItemTypeAdapter) commonAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mRecyclerView.setAdapter(mAdapter);
-
-        ptrClassicFrameLayout.postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                ptrClassicFrameLayout.autoRefresh(true);
-            }
-        }, 200);
+        mRecyclerView.addItemDecoration(new MDividerItemDecoration(mActivity, LinearLayout.VERTICAL, R.drawable.item_for_divider));
         ptrClassicFrameLayout.setPtrHandler(new PtrDefaultHandlerEx() {
 
             @Override
             public void onRefreshBegin(PtrFrameLayoutEx frame) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNum = 0;
-                        mDataList.clear();
-                        // 模拟数据
-                        for (int i = 0; i < 10; i++) {
-                            mDataList.add("str" + i);
-                        }
-                        // 注意使用notifyItemRangeChangedHF在下拉刷新的时候,由于之前clear会出现数据不同步问题
-                        mAdapter.notifyDataSetChangedHF();
-                        ptrClassicFrameLayout.refreshComplete();
-                        ptrClassicFrameLayout.setLoadMoreEnable(true);
-                    }
-                }, 3500);
+                refreshGetData();
             }
         });
         ptrClassicFrameLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
 
             @Override
             public void loadMore() {
-                handler.postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        int beforeChangeSize = mDataList.size() + mAdapter.getHeadSize() + 1;
-                        int size = 5;
-                        for (int i = 0; i < size; i++) {
-                            mDataList.add(new String("  RecyclerView item  - add " + pageNum));
-                        }
-                        mAdapter.notifyItemRangeInsertedHF(beforeChangeSize, size);
-                        ptrClassicFrameLayout.loadMoreComplete(false);
-                    }
-                }, 1000);
+                loadMoreGetData();
             }
         });
+        ptrClassicFrameLayout.autoRefresh(true);
+    }
+
+    /**
+     * 点击item
+     *
+     * @param position
+     */
+    public void clickItem(int position) {
+        boolean check = mDataList.get(position).isCheck();
+        mDataList.get(position).setCheck(!check);
+        commonAdapter.notifyItemChanged(position);
+        changeCheckAllStatus();
+    }
+
+    /**
+     * 点击全选
+     *
+     * @param view
+     */
+    @OnClick(R.id.iv_check_all)
+    public void clickChooseAll(View view) {
+        // 默认选中了全部
+        boolean hasCheckAll = true;
+        for (PermissionBean bean : mDataList) {
+            if (!bean.isCheck()) {
+                hasCheckAll = false;
+                break;
+            }
+        }
+        hasCheckAll = !hasCheckAll;
+        int resId = hasCheckAll ? R.drawable.ic_check_box_red_400_24dp : R.drawable.ic_check_box_outline_blank_grey_700_24dp;
+        mCheckAllIv.setImageResource(resId);
+        mCheckAllTv.setText(hasCheckAll ? "全不选" : "全选");
+
+        for (PermissionBean bean : mDataList) {
+            bean.setCheck(hasCheckAll);
+        }
+        mAdapter.notifyDataSetChangedHF();
+    }
+
+    /**
+     * 改变全选状态
+     *
+     * @return
+     */
+    private void changeCheckAllStatus() {
+        boolean hasCheckAll = true;
+        for (PermissionBean bean : mDataList) {
+            if (!bean.isCheck()) {
+                hasCheckAll = false;
+                break;
+            }
+        }
+        int resId = hasCheckAll ? R.drawable.ic_check_box_red_400_24dp : R.drawable.ic_check_box_outline_blank_grey_700_24dp;
+        mCheckAllIv.setImageResource(resId);
+        mCheckAllTv.setText(hasCheckAll ? "全不选" : "全选");
+    }
+
+    /**
+     * 点击提交
+     *
+     * @param view
+     */
+    @OnClick(R.id.tv_commit)
+    public void clickCommit(View view) {
+        presenter.clickCommit();
+    }
+
+    /**
+     * 点击取消
+     *
+     * @param view
+     */
+    @OnClick(R.id.tv_cancel)
+    public void clickCancel(View view) {
+        finish();
+    }
+
+    @Override
+    public void showDialog() {
+        mAlertDialog = new AlertProgressDialog.Builder(mActivity)
+                .setView(R.layout.layout_alert_dialog)
+                .setCancelable(false)
+                .setMessage(R.string.commit_data_ing)
+                .show();
+        ArrayList<PurchaseGroupBean> tempList = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject object;
+        try {
+            for (PermissionBean bean : mDataList) {
+                if (bean.isCheck()) {
+                    object = new JSONObject();
+                    object.put("permission_id", bean.getId());
+                    jsonArray.put(object);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String groups = jsonArray.toString();
+        presenter.commitData(mApplication, roleId + "", groups);
+    }
+
+    @Override
+    public void commitSuccess() {
+        if (mAlertDialog != null) {
+            mAlertDialog.dismiss();
+        }
+        finish();
+    }
+
+    @Override
+    public void commitFailed() {
+        if (mAlertDialog != null) {
+            mAlertDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void stopLoadData() {
+        if (mPageNum == 1) { // 下拉刷新
+            ptrClassicFrameLayout.refreshComplete();
+            ptrClassicFrameLayout.setLoadMoreEnable(false);
+        } else { // 上拉加载
+            ptrClassicFrameLayout.loadMoreComplete(false);
+        }
+    }
+
+    @Override
+    public void refreshGetData() {
+        resetPageNum();
+        presenter.getPermissionGroupList(mApplication, roleId, mPageNum, mPageSize);
+    }
+
+    @Override
+    public void loadMoreGetData() {
+        mPageNum++;
+        presenter.getPermissionGroupList(mApplication, roleId, mPageNum, mPageSize);
+    }
+
+    @Override
+    public void resetPageNum() {
+        mPageNum = 1;
+    }
+
+    @Override
+    public void operateSuccess(List<PermissionBean> baseBean) {
+        if (mPageNum == 1) { // 下拉刷新
+            mDataList.clear();
+            if (baseBean != null && baseBean.size() > 0) {
+                mDataList.addAll(baseBean);
+            }
+            mAdapter.notifyDataSetChangedHF();
+            ptrClassicFrameLayout.refreshComplete();
+            ptrClassicFrameLayout.setLoadMoreEnable(true);
+            if (baseBean.size() < ConstUtils.PAGE_SIZE) {
+                ptrClassicFrameLayout.loadMoreComplete(false);
+            }
+        } else { // 上拉加载
+            int beforeChangeSize = mDataList.size() + mAdapter.getHeadSize() + 1;
+            int getDataSize = (baseBean == null ? 0 : baseBean.size());
+            if (getDataSize != 0) {
+                mDataList.addAll(baseBean);
+                mAdapter.notifyItemRangeInsertedHF(beforeChangeSize, getDataSize);
+            }
+            ptrClassicFrameLayout.loadMoreComplete(false);
+        }
+        changeCheckAllStatus();
     }
 }

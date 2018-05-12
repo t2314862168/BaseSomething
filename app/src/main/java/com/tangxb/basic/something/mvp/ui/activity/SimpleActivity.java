@@ -10,24 +10,19 @@ import com.chanven.lib.cptr.PtrFrameLayoutEx;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.tangxb.basic.something.R;
-import com.tangxb.basic.something.bean.MBaseBean;
-import com.tangxb.basic.something.bean.UserLoginResultBean;
 import com.tangxb.basic.something.bean.WelfareBean;
 import com.tangxb.basic.something.compress.ImageCompressUtils;
 import com.tangxb.basic.something.demo.rxjava.RxJavaGreenDaoDemo;
 import com.tangxb.basic.something.mvp.presenter.BasePresenter;
 import com.tangxb.basic.something.mvp.presenter.SimpleActivityPresenter;
 import com.tangxb.basic.something.mvp.view.BaseActivityView;
-import com.tangxb.basic.something.tools.encrypt.MessageDigestUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import io.reactivex.functions.Consumer;
@@ -189,5 +184,25 @@ public class SimpleActivity extends BaseActivity implements BaseActivityView {
                 }
             }
         };
+    }
+
+    @Override
+    public void stopLoadData() {
+
+    }
+
+    @Override
+    public void refreshGetData() {
+
+    }
+
+    @Override
+    public void loadMoreGetData() {
+
+    }
+
+    @Override
+    public void resetPageNum() {
+
     }
 }

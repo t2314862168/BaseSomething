@@ -16,5 +16,5 @@ public class ConstUtils {
     /**
      * 每一页的页数大小
      */
-    public static final int PAGE_SIZE = 12;
+    public static final int PAGE_SIZE = 50;
 }

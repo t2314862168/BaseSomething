@@ -15,6 +15,16 @@ import io.reactivex.Observable;
 
 public class TaskFragmentModelImpl implements TaskFragmentModel {
 
+    /**
+     * 获取采购人
+     *
+     * @param token
+     * @param signatrue
+     * @param timestamp
+     * @param page
+     * @param rows
+     * @return
+     */
     @Override
     public Observable<MBaseBean<List<PurchaseUserBean>>> getPurchaseUserList(String token, String signatrue, String timestamp, int page, int rows) {
         return RetrofitRxClient.INSTANCE.getRetrofit().create(TaskRxAPI.class).getPurchaseUserList(token, signatrue, timestamp, page, rows);
